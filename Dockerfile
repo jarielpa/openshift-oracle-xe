@@ -17,8 +17,10 @@ ENTRYPOINT ["/tini", "--"]
 # - Install deps
 # - Work around the Swap memory limitation
 # - Work around the sysctl limitation of Docker
-ADD oracle-xe-11.2.0-1.0.x86_64.rpm /tmp/
-RUN sha1sum /tmp/oracle-xe-11.2.0-1.0.x86_64.rpm | grep -q "49e850d18d33d25b9146daa5e8050c71c30390b7" \
+ADD oracle-xe-11.2.0-1.0.x86_64.rpm.* /tmp/
+RUN cat /tmp/oracle-xe-11.2.0-1.0.x86_64.rpm.* > /tmp/oracle-xe-11.2.0-1.0.x86_64.rpm \
+    && rm /tmp/oracle-xe-11.2.0-1.0.x86_64.rpm.* \
+    && sha1sum /tmp/oracle-xe-11.2.0-1.0.x86_64.rpm | grep -q "49e850d18d33d25b9146daa5e8050c71c30390b7" \
     && yum install -y libaio bc flex net-tools \
     && mv /usr/bin/free /usr/bin/free.bak \
     && printf "#!/bin/sh\necho Swap - - 2048" > /usr/bin/free \
