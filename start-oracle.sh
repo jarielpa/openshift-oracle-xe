@@ -1,9 +1,12 @@
 #!/bin/bash
+# debugging
+set -x
+
+# Set userid for oracle user
+sed -i -e '/oracle/ s/x:[0-9]*:/x:'`id -u`':/' /etc/passwd
 
 # Set hostname  in listener.ora
 sed -i -E "s/HOST = [^)]+/HOST = $HOSTNAME/g" $ORACLE_HOME/network/admin/listener.ora;
-# Set userid for oracle user
-sed -i -e '/oracle/ s/x:[0-9]*:/x:'`id -u`':/' /etc/passwd
 
 # Set path if path not set (if called from /etc/rc)
 case $PATH in
