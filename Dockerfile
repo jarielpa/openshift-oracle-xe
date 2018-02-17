@@ -62,10 +62,9 @@ export ORACLE_SID=XE \n\
 ADD start-oracle.sh /u01/app/oracle
 
 # Adjust permissions
-RUN chmod g+w /u01/app/oracle/start-oracle.sh \
+RUN chmod +wx /u01/app/oracle/start-oracle.sh \
     && chown oracle:dba /u01/app/oracle/start-oracle.sh \
-    && chmod -Rf g+w /etc/passwd /etc/group \
-    && chmod g+w /u01/app/oracle/start-oracle.sh && chown oracle:dba /u01/app/oracle/start-oracle.sh
+    && chmod -Rf g+w /etc/passwd /etc/group
 
 USER oracle
 EXPOSE 1521 8080
