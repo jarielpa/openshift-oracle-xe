@@ -3,10 +3,8 @@
 set -x
 
 # Set userid for oracle user
-sed -i -e '/oracle/ s/x:[0-9]*:/x:'`id -u`':/' /etc/passwd
-
-# Set hostname  in listener.ora
-sed -i -E "s/HOST = [^)]+/HOST = $HOSTNAME/g" $ORACLE_HOME/network/admin/listener.ora;
+sed -e '/oracle/ s/x:[0-9]*:/x:'`id -u`':/' /etc/passwd >/tmp/passwd
+mv /tmp/passwd /etc/passwd
 
 # Set path if path not set (if called from /etc/rc)
 case $PATH in
@@ -39,6 +37,9 @@ export LC_ALL=C
 
 CONFIG_NAME=oracle-xe
 CONFIGURATION="/etc/sysconfig/$CONFIG_NAME"
+
+# Set hostname  in listener.ora
+sed -i -E "s/HOST = [^)]+/HOST = $HOSTNAME/g" $ORACLE_HOME/network/admin/listener.ora;
 
 # Source configuration
 
