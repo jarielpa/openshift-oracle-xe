@@ -21,7 +21,7 @@ ADD oracle-xe-11.2.0-1.0.x86_64.rpm.* /tmp/
 RUN cat /tmp/oracle-xe-11.2.0-1.0.x86_64.rpm.* > /tmp/oracle-xe-11.2.0-1.0.x86_64.rpm \
     && rm /tmp/oracle-xe-11.2.0-1.0.x86_64.rpm.* \
     && sha1sum /tmp/oracle-xe-11.2.0-1.0.x86_64.rpm | grep -q "49e850d18d33d25b9146daa5e8050c71c30390b7" \
-    && yum install -y libaio bc flex net-tools \
+    && yum install -y libaio bc flex net-tools gdb \
     && mv /usr/bin/free /usr/bin/free.bak \
     && printf "#!/bin/sh\necho Swap - - 2048" > /usr/bin/free \
     && chmod +x /usr/bin/free \
@@ -37,10 +37,13 @@ RUN cat /tmp/oracle-xe-11.2.0-1.0.x86_64.rpm.* > /tmp/oracle-xe-11.2.0-1.0.x86_6
     && mv /sbin/sysctl.bak /sbin/sysctl \
     && yum clean all
 
+# Add custom startup-script to run oracle as non-root
+ADD start-oracle.sh /u01/app/oracle
 
 # Configure Oracle
 # - run configure
 # - configure bashrc
+# Adjust permissions
 RUN printf "\
 ORACLE_HTTP_PORT=8080 \n\
 ORACLE_LISTENER_PORT=1521 \n\
@@ -56,13 +59,8 @@ ORACLE_DBENABLE=y \n\
 export ORACLE_HOME=/u01/app/oracle/product/11.2.0/xe \n\
 export PATH=$ORACLE_HOME/bin:$PATH \n\
 export ORACLE_SID=XE \n\
-' >> /etc/bash.bashrc
-
-# Add custom startup-script to run oracle as non-root
-ADD start-oracle.sh /u01/app/oracle
-
-# Adjust permissions
-RUN chmod +wx /u01/app/oracle/start-oracle.sh \
+' >> /etc/bash.bashrc \
+    && chmod +wx /u01/app/oracle/start-oracle.sh \
     && chmod g+w /etc/passwd /etc/group \
     && chgrp -Rf root /u01/app/oracle \
     && chmod -Rf g+w /u01/app/oracle
