@@ -63,8 +63,9 @@ ADD start-oracle.sh /u01/app/oracle
 
 # Adjust permissions
 RUN chmod +wx /u01/app/oracle/start-oracle.sh \
-    && chown oracle:dba /u01/app/oracle/start-oracle.sh \
-    && chmod -Rf g+w /etc/passwd /etc/group
+    && chmod g+w /etc/passwd /etc/group \
+    && chgrp -Rf root /u01/app/oracle \
+    && chmod -Rf g+w /u01/app/oracle
 
 USER oracle
 EXPOSE 1521 8080
