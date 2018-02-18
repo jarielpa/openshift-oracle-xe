@@ -2,10 +2,6 @@
 # debugging
 set -x
 
-# Set userid for oracle user
-sed -e '/oracle/ s/x:[0-9]*:/x:'`id -u`':/' /etc/passwd >/tmp/passwd
-mv /tmp/passwd /etc/passwd
-
 # Set path if path not set (if called from /etc/rc)
 case $PATH in
     "") PATH=/bin:/usr/bin:/sbin:/etc
