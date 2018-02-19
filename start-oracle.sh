@@ -1,6 +1,6 @@
 #!/bin/bash
 # debugging
-set -x
+#set -x
 
 # Set path if path not set (if called from /etc/rc)
 case $PATH in
