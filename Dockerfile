@@ -66,11 +66,13 @@ DIAG_ADR_ENABLED=OFF \n\
     && printf '\
 DIAG_ADR_ENABLED=OFF \n\
 ' >> /u01/app/oracle/product/11.2.0/xe/network/admin/listener.ora \
-    && chmod u+s /u01/app/oracle/product/11.2.0/xe/bin/oracle \
     && chmod +wx /u01/app/oracle/start-oracle.sh \
     && chmod g+w /etc/passwd /etc/group \
     && chgrp -Rf root /u01/app/oracle \
     && chmod -Rf g+w /u01/app/oracle
+
+RUN chmod u+s /u01/app/oracle/product/11.2.0/xe/bin/oracle \
+    && ls -l /u01/app/oracle/product/11.2.0/xe/bin/oracle
 
 USER oracle
 EXPOSE 1521 8080
